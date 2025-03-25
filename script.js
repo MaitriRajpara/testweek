@@ -81,7 +81,7 @@ function displayProducts() {
                     <h5 class="card-title">${product.ProductName}</h5>
                     <p class="card-text">Price: ${product.Price}</p>
                     <p class="card-text">${product.Description}</p>
-                    // <button class="btn btn-warning" onclick="editProduct('${product.ProductId}')">Edit</button>
+                    <button class="btn btn-warning" onclick="editProduct('${product.ProductId}')">Edit</button>
                     <button class="btn btn-danger" onclick="deleteProduct('${product.ProductId}')">Delete</button>
                 </div>
             </div>
