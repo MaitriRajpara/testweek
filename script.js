@@ -16,6 +16,11 @@ function generateProductId() {
     return crypto.randomUUID();
 }
 
+// Navigate back to product List
+function goBackToProducts() {
+    window.location.href = 'index.html';
+}
+
 // Navigate to Add Product Page
 function navtoAddProduct() {
     window.location.href = 'add_product.html';
@@ -23,35 +28,42 @@ function navtoAddProduct() {
 
 // Save or Update a Product
 function saveNewProduct() {
-    let productId = document.getElementById('productId').value || generateProductId();
-    let productName = document.getElementById('productName').value;
-    let productPrice = document.getElementById('productPrice').value;
-    let productDescription = document.getElementById('productDescription').value;
+    let productId = document.getElementById('productId').value;
+    let productName = document.getElementById('productName').value.trim();
+    let productPrice = document.getElementById('productPrice').value.trim();
+    let productDescription = document.getElementById('productDescription').value.trim();
     let imageInput = document.getElementById('imageInput').files[0];
+    let existingImage = document.getElementById('existingImage').src;
 
     if (productName && productPrice && productDescription) {
         let reader = new FileReader();
         reader.onload = function (e) {
-            let newProduct = {
-                ProductId: productId,
-                ProductName: productName,
-                Price: Number(productPrice),
-                Description: productDescription,
-                Image: e.target.result || document.getElementById('existingImage').src
-            };
-
             let products = getProducts();
             let existingIndex = products.findIndex(p => p.ProductId === productId);
 
             if (existingIndex !== -1) {
-                products[existingIndex] = newProduct;
+                // Update existing product
+                products[existingIndex].ProductName = productName;
+                products[existingIndex].Price = Number(productPrice);
+                products[existingIndex].Description = productDescription;
+                products[existingIndex].Image = imageInput ? e.target.result : existingImage; // Update image if new one is selected
+
+                alert('Product Updated Successfully');
             } else {
+                // Add new product
+                let newProduct = {
+                    ProductId: productId || generateProductId(),
+                    ProductName: productName,
+                    Price: Number(productPrice),
+                    Description: productDescription,
+                    Image: imageInput ? e.target.result : existingImage
+                };
                 products.push(newProduct);
                 alert('Product Added Successfully');
             }
 
             saveProducts(products);
-            alert('Done Successfully');
+            localStorage.removeItem('editProductId'); // Remove edit mode after save
             window.location.href = 'index.html';
         };
 
@@ -61,9 +73,10 @@ function saveNewProduct() {
             reader.onload();
         }
     } else {
-        alert('Please fill all fields and select an image');
+        alert('Please fill all fields');
     }
 }
+
 
 // Display Products
 function displayProducts() {
@@ -109,6 +122,9 @@ function fillFields() {
             document.getElementById('productDescription').value = product.Description;
             document.getElementById('existingImage').src = product.Image;
             document.getElementById('saveButton').innerText = "Save Changes";
+            let imageElement = document.getElementById('existingImage');
+            imageElement.src = product.Image;
+            imageElement.style.display = "block";
         }
         localStorage.removeItem('editProductId');
     }
