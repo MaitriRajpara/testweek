@@ -92,12 +92,9 @@ function displayProducts() {
 
 // Edit Product
 function editProduct(productId) {
-    console.log("Editing product with ID:", productId); // Debugging
     localStorage.setItem('editProductId', productId);
-    console.log("Stored editProductId:", localStorage.getItem('editProductId')); // Check if stored
     window.location.href = 'add_product.html';
 }
-
 
 // Populate Fields in Add Product Page when Editing
 function fillFields() {
@@ -115,7 +112,6 @@ function fillFields() {
         }
         localStorage.removeItem('editProductId');
     }
-    // editProduct();
 }
 
 // Delete Product
