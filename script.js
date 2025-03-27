@@ -35,6 +35,12 @@ function saveNewProduct() {
     let imageInput = document.getElementById('imageInput').files[0];
     let existingImage = document.getElementById('existingImage').src;
 
+    // Check if product price is a valid number
+    if (isNaN(productPrice) || productPrice === '') {
+        alert('Please enter a valid numeric value for the price.');
+        return;
+    }
+
     if (productName && productPrice && productDescription) {
         let reader = new FileReader();
         reader.onload = function (e) {
@@ -46,7 +52,7 @@ function saveNewProduct() {
                 products[existingIndex].ProductName = productName;
                 products[existingIndex].Price = Number(productPrice);
                 products[existingIndex].Description = productDescription;
-                products[existingIndex].Image = imageInput ? e.target.result : existingImage; // Update image if new one is selected
+                products[existingIndex].Image = imageInput ? e.target.result : existingImage;
 
                 alert('Product Updated Successfully');
             } else {
